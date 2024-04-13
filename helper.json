@@ -1,0 +1,127 @@
+{
+    "_id": "2231059",
+    "listing_url": "https://www.airbnb.com/rooms/2231059",
+    "name": "Bonito y cómodo loft en el centro",
+    "summary": "El piso consiste en un amplio espacio salón-comedor-cocina y una habitación interior para dormir. Recibe luz todo el día y especialmente a la tarde. Está reformado, completamente amueblado y equipado con lo necesario para pasar unos días muy agradables. Situado en el barrio del Raval, entre el mercado de Sant Antoni y la Rambla del Raval. La zona es animada y cosmopolita, llena de tiendas de comida, terrazas, restaurantes, museos, bibliotecas... Muy bien comunicado.",
+    "space": "",
+    "description": "El piso consiste en un amplio espacio salón-comedor-cocina y una habitación interior para dormir. Recibe luz todo el día y especialmente a la tarde. Está reformado, completamente amueblado y equipado con lo necesario para pasar unos días muy agradables. Situado en el barrio del Raval, entre el mercado de Sant Antoni y la Rambla del Raval. La zona es animada y cosmopolita, llena de tiendas de comida, terrazas, restaurantes, museos, bibliotecas... Muy bien comunicado.",
+    "neighborhood_overview": "",
+    "notes": "",
+    "transit": "",
+    "access": "",
+    "interaction": "",
+    "house_rules": "",
+    "property_type": "Apartment",
+    "room_type": "Entire home/apt",
+    "bed_type": "Real Bed",
+    "minimum_nights": "3",
+    "maximum_nights": "15",
+    "cancellation_policy": "flexible",
+    "last_scraped": "2019-03-08T05:00:00.000Z",
+    "calendar_last_scraped": "2019-03-08T05:00:00.000Z",
+    "first_review": "2019-03-04T05:00:00.000Z",
+    "last_review": "2019-03-04T05:00:00.000Z",
+    "accommodates": 3,
+    "bedrooms": 1,
+    "beds": 2,
+    "number_of_reviews": 1,
+    "reviews_per_month": 1,
+    "bathrooms": {
+      "$numberDecimal": "1.0"
+    },
+    "amenities": [
+      "Internet",
+      "Kitchen",
+      "Smoking allowed",
+      "Pets allowed",
+      "Family/kid friendly",
+      "Essentials",
+      "Hangers",
+      "Hot water",
+      "Bed linens",
+      "Extra pillows and blankets"
+    ],
+    "price": {
+      "$numberDecimal": "100.00"
+    },
+    "weekly_price": {
+      "$numberDecimal": "380.00"
+    },
+    "monthly_price": {
+      "$numberDecimal": "1050.00"
+    },
+    "security_deposit": {
+      "$numberDecimal": "150.00"
+    },
+    "cleaning_fee": {
+      "$numberDecimal": "30.00"
+    },
+    "extra_people": {
+      "$numberDecimal": "40.00"
+    },
+    "guests_included": {
+      "$numberDecimal": "3"
+    },
+    "images": {
+      "thumbnail_url": "",
+      "medium_url": "",
+      "picture_url": "https://a0.muscache.com/im/pictures/30065717/ee1ab947_original.jpg?aki_policy=large",
+      "xl_picture_url": ""
+    },
+    "host": {
+      "host_id": "11387473",
+      "host_url": "https://www.airbnb.com/users/show/11387473",
+      "host_name": "Alberto",
+      "host_location": "Sant Pere de Ribes, Catalonia, Spain",
+      "host_about": "",
+      "host_response_time": "within a few hours",
+      "host_thumbnail_url": "https://a0.muscache.com/im/users/11387473/profile_pic/1407520912/original.jpg?aki_policy=profile_small",
+      "host_picture_url": "https://a0.muscache.com/im/users/11387473/profile_pic/1407520912/original.jpg?aki_policy=profile_x_medium",
+      "host_neighbourhood": "",
+      "host_response_rate": 100,
+      "host_is_superhost": false,
+      "host_has_profile_pic": true,
+      "host_identity_verified": false,
+      "host_listings_count": 1,
+      "host_total_listings_count": 1,
+      "host_verifications": [
+        "email",
+        "phone",
+        "jumio",
+        "government_id"
+      ]
+    },
+    "address": {
+      "street": "Barcelona, Catalonia, Spain",
+      "suburb": "Ciutat Vella",
+      "government_area": "el Raval",
+      "market": "Barcelona",
+      "country": "Spain",
+      "country_code": "ES",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          2.16375,
+          41.37956
+        ],
+        "is_location_exact": false
+      }
+    },
+    "availability": {
+      "availability_30": 0,
+      "availability_60": 3,
+      "availability_90": 3,
+      "availability_365": 69
+    },
+    "review_scores": {},
+    "reviews": [
+      {
+        "_id": "419603111",
+        "date": "2019-03-04T05:00:00.000Z",
+        "listing_id": "2231059",
+        "reviewer_id": "106390681",
+        "reviewer_name": "Lauriane",
+        "comments": "The host canceled this reservation 43 days before arrival. This is an automated posting."
+      }
+    ]
+  }

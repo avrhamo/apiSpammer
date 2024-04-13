@@ -1,0 +1,10 @@
+mongodb+srv://m001-student:avimongo675@sandbox.aeaa1.mongodb.net/test
+
+curl -X POST \
+  http://example.com/api/resource \
+  -u username:password \
+  -H 'Authorization: Bearer your_jwt_token' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "key": "value"
+}'
