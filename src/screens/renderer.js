@@ -14,8 +14,6 @@ const collectioButton = document.getElementById('collection-button');
 
 const dataSampleBox = document.getElementById('data-sample-text');
 
-const curlTextArea = document.getElementById('curl-text-area');
-
 
 let selectedDB;
 let selectedCollection;
@@ -79,7 +77,3 @@ ipcRenderer.on('mostRichDocument-retrived', (event, mostRichDocument) => {
   dataSampleBox.style.fontFamily = 'monospace';
 });
 
-
-curlTextArea.addEventListener('oninput', (event, curl) => {
-  ipcRenderer.send(curl);
-});

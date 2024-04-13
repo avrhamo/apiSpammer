@@ -1,7 +1,7 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron');
 const mongodbHandler = require('./dataBase/mongodbHandler');
 const curlHandler = require('./dataBase/curlHandler');
-// const curlconverter = require('curlconverter');
+
 
 let connectionStringGlobal;
 
@@ -90,14 +90,9 @@ ipcMain.on('collection-selected', async (event, selectedDB, selectedCollection) 
     event.sender.send('collection-selected', 'Failed to retrieve MostRichDocument from database');
   }
 });
-//
+
 // ipcMain.on('parse-curl', async (event, curl) => {
-//   const options = { output: 'json' };
-//   curlconverter.toJsonString(curl, options)
-//       .then((jsonFormat) => {
-//           console.log(jsonFormat);
-//       })
-//       .catch((error) => {
-//           console.error(error);
-//       });
+//   console.log(curlconverter.toJsonString(curl));
 // });
+
+

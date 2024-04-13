@@ -1,15 +1,10 @@
-const { ipcRenderer } = require('electron');
-const curlconverter = require('curlconverter');
+import {curlconverter} from 'curlconverter';
+import { ipcRenderer } from 'electron';
 
+const curlTextArea = document.getElementById('curl-text-area');
+const parseCurlButton = document.getElementById('parse-curl-button');
 
-exports.parseCurlToJson = (curlCommand) => {
-
-    const options = { output: 'json' };
-    curlconverter.toNode(curlCommand, options)
-        .then((jsonFormat) => {
-            console.log(jsonFormat);
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-}
+parseCurlButton.addEventListener('click', async () => {
+    const jsonString = curlconverter.toJsonString(curlTextArea.value);
+    await ipcRenderer.send('parse-curl', jsonString);
+});
