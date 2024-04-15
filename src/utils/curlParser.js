@@ -82,7 +82,8 @@ exports.parse = function(s) {
     }
   });
 
-  return out;
+  // Convert the output object to JSON format
+  return JSON.stringify(out);
 };
 
 /**
