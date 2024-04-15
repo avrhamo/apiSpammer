@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const mongodbHandler = require('./dataBase/mongodbHandler');
-const curlHandler = require('./dataBase/curlHandler');
+// const { curlconverter } = require( 'curlconverter');
+// const curlHandler = require('./dataBase/curlHandler');
+const curlParser = require('./utils/curlParser');
 
 
 let connectionStringGlobal;
@@ -91,8 +93,8 @@ ipcMain.on('collection-selected', async (event, selectedDB, selectedCollection) 
   }
 });
 
-// ipcMain.on('parse-curl', async (event, curl) => {
-//   console.log(curlconverter.toJsonString(curl));
-// });
+ipcMain.on('parse-curl', async (event, curl) => {
+  console.log(curlParser.parse(curl));
+});
 
 
