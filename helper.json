@@ -1,16 +1,25 @@
 {
-  "method": "OPTIONS",
+  "method": "GET",
   "headers": {
-    "accept": "*/*",
+    "authority": "login.bankhapoalim.co.il",
+    "accept": "application/json, text/plain, */*",
     "accept-language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
-    "access-control-request-headers": "authorization",
-    "access-control-request-method": "POST",
-    "origin": "https://mail.google.com",
-    "referer": "https://mail.google.com/",
+    "content-type": "application/json;charset=UTF-8",
+    "$cookie": "_cls_v=b9460df9-b310-40bf-b065-8ab55c870260; bnhpremarketing=remarkiting; _ga_K0N0FQSH4V=GS1.3.1693496955.2.0.1693496955.60.0.0; ",
+    "origin": "https://login.bankhapoalim.co.il",
+    "referer": "https://login.bankhapoalim.co.il/ng-portals/rb/he/plastic-cards/order",
+    "sec-ch-ua": "\"Chromium\";v=\"112\", \"Google Chrome\";v=\"112\", \"Not:A-Brand\";v=\"99\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"macOS\"",
     "sec-fetch-dest": "empty",
     "sec-fetch-mode": "cors",
-    "sec-fetch-site": "same-site",
-    "user-agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Mobile Safari/537.36"
+    "sec-fetch-site": "same-origin",
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
+    "x-api-version": "2",
+    "x-b3-traceid": "c329a74f-aac8-aee0-b853-a9bb33e9a665",
+    "x-dtpc": "1$289483091_634h4623vNAPAUUVOVNCCGPQDPGHFREUSBAGEDJKW-0",
+    "x-xsrf-token": "0bbb3f9a30090844de164a4d483e68ee52aeadcd14407ca6b2c01aaa95daefde",
+    "Accept-Encoding": "deflate, gzip"
   },
-  "url": "https://play.google.com/log?format=json&hasfast=true"
+  "url": "https://login.bankhapoalim.co.il/bnhp-api/cards-channels/web-offer/v2/offers/e3b23829-498d-48da-8f53-6f2db8187cde/choices-details?_lang=he-IL"
 }
