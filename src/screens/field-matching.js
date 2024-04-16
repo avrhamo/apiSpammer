@@ -1,5 +1,40 @@
 
-const curlInput = '{"method":"GET","headers":{"authority":"login.bankhapoalim.co.il","accept":"application/json, text/plain, */*","accept-language":"he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7","content-type":"application/json;charset=UTF-8","$cookie":"_cls_v=b9460df9-b310-40bf-b065-8ab55c870260; bnhpremarketing=","referer":"https://login.bankhapoalim.co.il/ng-portals/rb/he/plastic-cards/order","sec-ch-ua":"\\"Chromium\\";v=\\"112\\", \\"Google Chrome\\";v=\\"112\\", \\"Not:A-Brand\\";v=\\"99\\"","sec-ch-ua-mobile":"?0","sec-ch-ua-platform":"\\"macOS\\"","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-origin","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36","x-api-version":"2","x-b3-traceid":"60e464a7-3393-da14-5c3c-32d6a240adc8","x-xsrf-token":"44d150ef9fd5736621a8ada34d09405e72076a1de3bf8cf852d755224ddeb773","Accept-Encoding":"deflate, gzip"},"url":"https://login.bankhapoalim.co.il/bnhp-api/cards-channels/web-proposal/v1/proposals/credit-lobby?accountId=12-544-468629&_lang=he-IL"}';
+const curlInput = '{\n' +
+    '  "method": "POST",\n' +
+    '  "headers": {\n' +
+    '    "authority": "www.google.com",\n' +
+    '    "accept": "*/*",\n' +
+    '    "accept-language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",\n' +
+    '    "authorization": "SAPISIDHASH fd6f438c547cf9565ed53d9c95f5a8bc5ab5e0fe",\n' +
+    '    "content-type": "text/plain;charset=UTF-8",\n' +
+    '    "cookie": "SEARCH_SAMESITE=CgQIgZoB; HSID=AxLuoewIsbPmSoVYm; SSID=AiNd8eNJ0RKAp_nz7; SAPISID=GSF0KpO42ELxwOTG/A4LlgTZOQ1kj4huLd; APISID=roPIWJw55f9b7Dyf/AUHWrEbUZOlaJGZty; __Secure-1PAPISID=GSF0KpO42ELxwOTG/A4LlgTZOQ1kj4huLd; __Secure-3PAPISID=GSF0KpO42ELxwOTG/A4LlgTZOQ1kj4huLd; S=billing-ui-v3=N8eLfGB2-5OklhR4be_K1qh7NB_L8jr_:billing-ui-v3-efe=N8eLfGB2-5OklhR4be_K1qh7NB_L8jr_; SID=g.a000hwjqMoLKWUs2YFiznOIt5lMfppRLpzg8MG1QDo9wAq9RAJJ-8thxuTPRos0USUkzIa1yfQACgYKASMSAQASFQHGX2Mi4Mk-t-q1dKVyUyyjGSNaJhoVAUF8yKr_anKsuF0rwvnxbfuaEcGu0076; __Secure-1PSID=g.a000hwjqMoLKWUs2YFiznOIt5lMfppRLpzg8MG1QDo9wAq9RAJJ-CdgCoETE_hsnPPcwuxubjgACgYKAeUSAQASFQHGX2Mi3L5GLszryowCm987iqhi9BoVAUF8yKoCFmMI_4Mk3PxuxBNCE-_I0076; __Secure-3PSID=g.a000hwjqMoLKWUs2YFiznOIt5lMfppRLpzg8MG1QDo9wAq9RAJJ-waBaus0NSU_ml9ZIqcZkEwACgYKAUASAQASFQHGX2Mi2Di5qom_p1DiqoaEdQu9RBoVAUF8yKpJCMgIpydfDNAx3GmSqslt0076; AEC=AQTF6HyX_XxLFicqydpFP5T9g-MXp8N_Q90_cweT3X4PqETmqxF5yAHIKg; __Secure-1PSIDTS=sidts-CjEB7F1E_BVWEHvheYvLGNt-kv388zZXOz1s5omdHVx61xUTY5rLkZrRwZdjz71A_tHhEAA; __Secure-3PSIDTS=sidts-CjEB7F1E_BVWEHvheYvLGNt-kv388zZXOz1s5omdHVx61xUTY5rLkZrRwZdjz71A_tHhEAA; NID=513=hy3QFkWN7ELdPfQr1kLUd5_-_YxN8zn0XPvCdu2es4tHS97JbmWRWMybLsAarsKFuhmsepiggGSyg0PcN2oQsgaAl2iklptJhkylf_0qtPfArrA8IBRpIsm-1uZ_YVYE0xOhG8hRiqy66BhmY7O0yGv6nWayS6rzpQ8I5IcvjM7-vQPGwmaZV5MFNP8e5_ZtTFrm73mVwybJQdwLquOUcfFWEudOPRJvIRlWQSfEEolLt2xqgPbrlKYJIp-2PXG2Gwte-FbdHf9ROtLk2Ya-xtCS8vwm609d0Mp_RZlAol53vbjGU_-xR4OUJx-gM07IcCKC_Iq1ypVWZdasrZ4UkUJ9nPHBoudbiegcmtEYdZxbfNOMJyxjcunukg-JPO3SKqlfZn9F7x3gRwuRZq6PFPPemocA4Ho5QamuGy6P1lqJHloQNMGY80fWPh9utrZ37xo; 1P_JAR=2024-04-16-17; DV=QwpTQpIkRJpbACJ-bZgLX57d_JKA7phw4P5MyRCtgwAAAMDhzkjRjHWQtQAAAKxvDnFuwjx5PQAAAGggPL0IFLG4EQAAAA; SIDCC=AKEyXzWBj_4YncB5a17SO_koQlbgtyUhcFHqwD5GF8v976nsnEafQwJ2N2V9TIA0qE-UkaM_Oo0; __Secure-1PSIDCC=AKEyXzXen20O4yFeaC-98MJPShGrY-G2EcU-vJocbYCvUBIUpwmpxu14QVJQnQvTOd0dTxN_X-Ps; __Secure-3PSIDCC=AKEyXzXwUgmnCsi6Kw-2xiLJ-9dAX-E_-gxLOGD1v2-g38BbO1HiRsIeO9-2h_CCA-p9btVmQJFW",\n' +
+    '    "origin": "https://www.google.com",\n' +
+    '    "referer": "https://www.google.com/",\n' +
+    '    "sec-ch-ua": "\\"Chromium\\";v=\\"112\\", \\"Google Chrome\\";v=\\"112\\", \\"Not:A-Brand\\";v=\\"99\\"",\n' +
+    '    "sec-ch-ua-arch": "\\"arm\\"",\n' +
+    '    "sec-ch-ua-bitness": "\\"64\\"",\n' +
+    '    "sec-ch-ua-full-version": "\\"112.0.5615.121\\"",\n' +
+    '    "sec-ch-ua-full-version-list": "\\"Chromium\\";v=\\"112.0.5615.121\\", \\"Google Chrome\\";v=\\"112.0.5615.121\\", \\"Not:A-Brand\\";v=\\"99.0.0.0\\"",\n' +
+    '    "sec-ch-ua-mobile": "?0",\n' +
+    '    "sec-ch-ua-model": "\\"\\"",\n' +
+    '    "sec-ch-ua-platform": "\\"macOS\\"",\n' +
+    '    "sec-ch-ua-platform-version": "\\"14.4.0\\"",\n' +
+    '    "sec-ch-ua-wow64": "?0",\n' +
+    '    "sec-fetch-dest": "empty",\n' +
+    '    "sec-fetch-mode": "cors",\n' +
+    '    "sec-fetch-site": "same-origin",\n' +
+    '    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",\n' +
+    '    "x-client-data": "CJW2yQEIpbbJAQipncoBCLyKywEIkqHLAQiGoM0BCIqnzQEIu8jNAQ==",\n' +
+    '    "x-goog-authuser": "0",\n' +
+    '    "Content-Type": "application/x-www-form-urlencoded"\n' +
+    '  },\n' +
+    '  "url": "https://www.google.com/log?format=json&hasfast=true&authuser=0",\n' +
+    '  "body": {\n' +
+    '    "body-value1": "value1",\n' +
+    '    "body-value2": "value2",\n' +
+    '    "body-value3": "value3"\n' +
+    '  }\n' +
+    '}';
 
 const parsedCurlInput = JSON.parse(curlInput);
 
@@ -62,7 +97,7 @@ function generateTableRows(components) {
                         tableRows += `<tr>
                             <td>${subKey}</td>
                             <td>
-                                <select class="dropdown" data-key="${subKey}">
+                                <select class="form-select" data-key="${subKey}">
                                     <!-- Dropdown options will be populated dynamically -->
                                 </select>
                             </td>
@@ -74,9 +109,11 @@ function generateTableRows(components) {
                 tableRows += `<tr>
                     <td>${key}</td>
                     <td>
-                        <select class="dropdown" data-key="${key}">
+                        <div style="display: flex;">
+                            <select class="form-select" data-key="${key}">
                             <!-- Dropdown options will be populated dynamically -->
-                        </select>
+                            </select>
+                        </div>
                     </td>
                 </tr>`;
             }

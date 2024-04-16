@@ -1,25 +1,36 @@
 {
-  "method": "GET",
+  "method": "POST",
   "headers": {
-    "authority": "login.bankhapoalim.co.il",
-    "accept": "application/json, text/plain, */*",
+    "authority": "www.google.com",
+    "accept": "*/*",
     "accept-language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
-    "content-type": "application/json;charset=UTF-8",
-    "$cookie": "_cls_v=b9460df9-b310-40bf-b065-8ab55c870260; bnhpremarketing=remarkiting; _ga_K0N0FQSH4V=GS1.3.1693496955.2.0.1693496955.60.0.0; ",
-    "origin": "https://login.bankhapoalim.co.il",
-    "referer": "https://login.bankhapoalim.co.il/ng-portals/rb/he/plastic-cards/order",
+    "authorization": "SAPISIDHASH fd6f438c547cf9565ed53d9c95f5a8bc5ab5e0fe",
+    "content-type": "text/plain;charset=UTF-8",
+    "cookie": "SEARCH_SAMESITE=CgQIgZoB; HSID=AxLuoewIsbPmSoVYm; SSID=AiNd8eNJ0RKAp_nz7; SAPISID=GSF0KpO42ELxwOTG/A4LlgTZOQ1kj4huLd; APISID=roPIWJw55f9b7Dyf/AUHWrEbUZOlaJGZty; __Secure-1PAPISID=GSF0KpO42ELxwOTG/A4LlgTZOQ1kj4huLd; __Secure-3PAPISID=GSF0KpO42ELxwOTG/A4LlgTZOQ1kj4huLd; S=billing-ui-v3=N8eLfGB2-5OklhR4be_K1qh7NB_L8jr_:billing-ui-v3-efe=N8eLfGB2-5OklhR4be_K1qh7NB_L8jr_; SID=g.a000hwjqMoLKWUs2YFiznOIt5lMfppRLpzg8MG1QDo9wAq9RAJJ-8thxuTPRos0USUkzIa1yfQACgYKASMSAQASFQHGX2Mi4Mk-t-q1dKVyUyyjGSNaJhoVAUF8yKr_anKsuF0rwvnxbfuaEcGu0076; __Secure-1PSID=g.a000hwjqMoLKWUs2YFiznOIt5lMfppRLpzg8MG1QDo9wAq9RAJJ-CdgCoETE_hsnPPcwuxubjgACgYKAeUSAQASFQHGX2Mi3L5GLszryowCm987iqhi9BoVAUF8yKoCFmMI_4Mk3PxuxBNCE-_I0076; __Secure-3PSID=g.a000hwjqMoLKWUs2YFiznOIt5lMfppRLpzg8MG1QDo9wAq9RAJJ-waBaus0NSU_ml9ZIqcZkEwACgYKAUASAQASFQHGX2Mi2Di5qom_p1DiqoaEdQu9RBoVAUF8yKpJCMgIpydfDNAx3GmSqslt0076; AEC=AQTF6HyX_XxLFicqydpFP5T9g-MXp8N_Q90_cweT3X4PqETmqxF5yAHIKg; __Secure-1PSIDTS=sidts-CjEB7F1E_BVWEHvheYvLGNt-kv388zZXOz1s5omdHVx61xUTY5rLkZrRwZdjz71A_tHhEAA; __Secure-3PSIDTS=sidts-CjEB7F1E_BVWEHvheYvLGNt-kv388zZXOz1s5omdHVx61xUTY5rLkZrRwZdjz71A_tHhEAA; NID=513=hy3QFkWN7ELdPfQr1kLUd5_-_YxN8zn0XPvCdu2es4tHS97JbmWRWMybLsAarsKFuhmsepiggGSyg0PcN2oQsgaAl2iklptJhkylf_0qtPfArrA8IBRpIsm-1uZ_YVYE0xOhG8hRiqy66BhmY7O0yGv6nWayS6rzpQ8I5IcvjM7-vQPGwmaZV5MFNP8e5_ZtTFrm73mVwybJQdwLquOUcfFWEudOPRJvIRlWQSfEEolLt2xqgPbrlKYJIp-2PXG2Gwte-FbdHf9ROtLk2Ya-xtCS8vwm609d0Mp_RZlAol53vbjGU_-xR4OUJx-gM07IcCKC_Iq1ypVWZdasrZ4UkUJ9nPHBoudbiegcmtEYdZxbfNOMJyxjcunukg-JPO3SKqlfZn9F7x3gRwuRZq6PFPPemocA4Ho5QamuGy6P1lqJHloQNMGY80fWPh9utrZ37xo; 1P_JAR=2024-04-16-17; DV=QwpTQpIkRJpbACJ-bZgLX57d_JKA7phw4P5MyRCtgwAAAMDhzkjRjHWQtQAAAKxvDnFuwjx5PQAAAGggPL0IFLG4EQAAAA; SIDCC=AKEyXzWBj_4YncB5a17SO_koQlbgtyUhcFHqwD5GF8v976nsnEafQwJ2N2V9TIA0qE-UkaM_Oo0; __Secure-1PSIDCC=AKEyXzXen20O4yFeaC-98MJPShGrY-G2EcU-vJocbYCvUBIUpwmpxu14QVJQnQvTOd0dTxN_X-Ps; __Secure-3PSIDCC=AKEyXzXwUgmnCsi6Kw-2xiLJ-9dAX-E_-gxLOGD1v2-g38BbO1HiRsIeO9-2h_CCA-p9btVmQJFW",
+    "origin": "https://www.google.com",
+    "referer": "https://www.google.com/",
     "sec-ch-ua": "\"Chromium\";v=\"112\", \"Google Chrome\";v=\"112\", \"Not:A-Brand\";v=\"99\"",
+    "sec-ch-ua-arch": "\"arm\"",
+    "sec-ch-ua-bitness": "\"64\"",
+    "sec-ch-ua-full-version": "\"112.0.5615.121\"",
+    "sec-ch-ua-full-version-list": "\"Chromium\";v=\"112.0.5615.121\", \"Google Chrome\";v=\"112.0.5615.121\", \"Not:A-Brand\";v=\"99.0.0.0\"",
     "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-model": "\"\"",
     "sec-ch-ua-platform": "\"macOS\"",
+    "sec-ch-ua-platform-version": "\"14.4.0\"",
+    "sec-ch-ua-wow64": "?0",
     "sec-fetch-dest": "empty",
     "sec-fetch-mode": "cors",
     "sec-fetch-site": "same-origin",
     "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
-    "x-api-version": "2",
-    "x-b3-traceid": "c329a74f-aac8-aee0-b853-a9bb33e9a665",
-    "x-dtpc": "1$289483091_634h4623vNAPAUUVOVNCCGPQDPGHFREUSBAGEDJKW-0",
-    "x-xsrf-token": "0bbb3f9a30090844de164a4d483e68ee52aeadcd14407ca6b2c01aaa95daefde",
-    "Accept-Encoding": "deflate, gzip"
+    "x-client-data": "CJW2yQEIpbbJAQipncoBCLyKywEIkqHLAQiGoM0BCIqnzQEIu8jNAQ==",
+    "x-goog-authuser": "0",
+    "Content-Type": "application/x-www-form-urlencoded"
   },
-  "url": "https://login.bankhapoalim.co.il/bnhp-api/cards-channels/web-offer/v2/offers/e3b23829-498d-48da-8f53-6f2db8187cde/choices-details?_lang=he-IL"
+  "url": "https://www.google.com/log?format=json&hasfast=true&authuser=0",
+  "body": {
+    "body-value1": "value1",
+    "body-value2": "value2",
+    "body-value3": "value3"
+  }
 }
