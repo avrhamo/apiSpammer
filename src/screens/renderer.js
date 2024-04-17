@@ -7,7 +7,7 @@ const connectButton = document.getElementById('connect-button');
 const connectionString = document.getElementById('connection-string-text');
 
 const dbMenu = document.getElementById('DB-menu');
-const collectioMenu = document.getElementById('collections-menu');
+const collectionMenu = document.getElementById('collections-menu');
 
 const DBButton = document.getElementById('DB-button');
 const collectioButton = document.getElementById('collection-button');
@@ -39,7 +39,7 @@ dbMenu.addEventListener('click', (event) => {
   }
 });
 
-collectioMenu.addEventListener('click', (event) => {
+collectionMenu.addEventListener('click', (event) => {
   if (event.target.classList.contains('dropdown-item')) {
     selectedCollection = event.target.textContent;
     collectioButton.textContent = event.target.textContent;
@@ -60,13 +60,13 @@ ipcRenderer.on('dbList-retrived', (event, dbLists) => {
 });
 
 ipcRenderer.on('collectionList-retrived', (event, collectionList) => {
-  collectioMenu.innerHTML = '';
+  collectionMenu.innerHTML = '';
   collectionList.forEach(collectionName => {
     const menuItem = document.createElement('a');
     menuItem.classList.add('dropdown-item');
     menuItem.href = '#';
     menuItem.textContent = collectionName;
-    collectioMenu.appendChild(menuItem);
+    collectionMenu.appendChild(menuItem);
   });
 });
 

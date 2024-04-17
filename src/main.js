@@ -1,8 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const mongodbHandler = require('./dataBase/mongodbHandler');
-// const { curlconverter } = require( 'curlconverter');
-// const curlHandler = require('./dataBase/curlHandler');
 const curlParser = require('./utils/curlParser');
+const Store = require('electron-store');
+const store= new Store();
 
 
 let connectionStringGlobal;
@@ -71,7 +71,6 @@ ipcMain.on('connect-to-DB', async (event, connectionString) => {
 ipcMain.on('db-selected', async (event, selectedDB) => {
   try {
     await mongodbHandler.connectToMongoDBServer(connectionStringGlobal);
-    console.log('YYYYYY  -  ' + connectionStringGlobal);
     const collections = await mongodbHandler.getCollectionsList(selectedDB);
     await mongodbHandler.closeConnectionToMongoDBServer();
     event.sender.send('collectionList-retrived', collections);
@@ -86,7 +85,30 @@ ipcMain.on('collection-selected', async (event, selectedDB, selectedCollection) 
     await mongodbHandler.connectToMongoDBServer(connectionStringGlobal);
     const mostRichDocument = await mongodbHandler.getMostRichDocument(selectedDB, selectedCollection);
     await mongodbHandler.closeConnectionToMongoDBServer();
+
+    const collection = {
+      collectionName: selectedCollection,
+      collectionDb: selectedDB,
+      dataSample: mostRichDocument
+    };
+    const dataSource = store.get('appStorage.dataSource', []);
+
+    const isItemExists = dataSource.some(item =>
+        item.collection.collectionName === selectedCollection &&
+        item.collection.collectionDb === selectedDB
+    );
+    if (!isItemExists) {
+
+      dataSource.push({ collection });
+      store.set('appStorage', { dataSource });
+      console.dir(store.get('appStorage'), { depth: null });
+
+    } else {
+      console.log('Item already exists in collection');
+    }
+
     event.sender.send('mostRichDocument-retrived', mostRichDocument);
+
   } catch (error) {
     console.error('Error retrieving MostRichDocument from database:', error);
     event.sender.send('collection-selected', 'Failed to retrieve MostRichDocument from database');

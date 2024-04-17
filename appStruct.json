@@ -1,0 +1,23 @@
+{
+  "appStorage": {
+    "dataSource": [
+      {
+        "collection": {
+          "collectionName": "",
+          "collectionDb": "",
+          "dataSample": ""
+        }
+      },
+      {
+        "collection": {
+          "collectionName": "",
+          "collectionDb": "",
+          "dataSample": ""
+        }
+      }
+    ],
+    "request": {
+      "curlAsJson": ""
+    }    
+  }
+}
