@@ -116,7 +116,20 @@ ipcMain.on('collection-selected', async (event, selectedDB, selectedCollection) 
 });
 
 ipcMain.on('parse-curl', async (event, curl) => {
-  console.log(curlParser.parse(curl));
+
+  const request = store.get('request.curlAsJson');
+  const isItemExists = request.curlAsJson == null && request.curlAsJson == curl;
+
+  if (!isItemExists) {
+
+    request.push({ curlAsJson: curl });
+    store.set('appStorage', { request });
+    console.dir(store.get('appStorage'), { depth: null });
+
+  } else {
+    console.log('Item already exists in collection');
+  }
 });
 
 
+ 
