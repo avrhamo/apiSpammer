@@ -8,3 +8,16 @@ curl -X POST \
   -d '{
     "key": "value"
 }'
+
+
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" 
+            aria-expanded="false" 
+            data-bs-toggle="dropdown"
+            type="button"> ${key} 
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">
+                    First Item</a>
+            </div>
+        </div>

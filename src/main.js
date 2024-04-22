@@ -1,8 +1,9 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, contextBridge } = require('electron');
+const path = require('path');
 const mongodbHandler = require('./dataBase/mongodbHandler');
 const curlParser = require('./utils/curlParser');
 const Store = require('electron-store');
-const store= new Store();
+const store = new Store();
 
 
 let connectionStringGlobal;
@@ -19,12 +20,36 @@ function createWindow() {
   })
 
   mainWindow.loadFile('./pages/dataSource.html')
+  
+  global.store = store;
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools();
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(createWindow);
+
+function clearStorage(){
+  // store.clear();
+}
+
+app.on('before-quit', () => {
+  clearStorage();
+});
+
+app.on('will-quit', () => {
+  clearStorage();
+});
+
+ipcMain.on('electronStore.get', (event, key) => {
+  const value = store.get(key);
+  event.sender.send('electronStore.get.response', value);
+});
+
+ipcMain.on('electronStore.set', (event, key, value) => {
+  store.set(key, value);
+  event.sender.send('electronStore.set.response');
+});
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
@@ -94,8 +119,8 @@ ipcMain.on('collection-selected', async (event, selectedDB, selectedCollection) 
     const dataSource = store.get('appStorage.dataSource', []);
 
     const isItemExists = dataSource.some(item =>
-        item.collection.collectionName === selectedCollection &&
-        item.collection.collectionDb === selectedDB
+      item.collection.collectionName === selectedCollection &&
+      item.collection.collectionDb === selectedDB
     );
     if (!isItemExists) {
 
@@ -116,20 +141,23 @@ ipcMain.on('collection-selected', async (event, selectedDB, selectedCollection) 
 });
 
 ipcMain.on('parse-curl', async (event, curl) => {
+  try {
+    const storedRequest = store.get('request', {});
+    const storedCurlAsJson = storedRequest.curlAsJson;
 
-  const request = store.get('request.curlAsJson');
-  const isItemExists = request.curlAsJson == null && request.curlAsJson == curl;
+    if (storedCurlAsJson === null || storedCurlAsJson !== curl) {
 
-  if (!isItemExists) {
-
-    request.push({ curlAsJson: curl });
-    store.set('appStorage', { request });
-    console.dir(store.get('appStorage'), { depth: null });
-
-  } else {
-    console.log('Item already exists in collection');
+        storedRequest.curlAsJson = curlParser.parse(curl);
+        store.set('appStorage.request', storedRequest);
+    } else {
+      console.log('Item already exists in collection');
+    }
+  } catch (error) {
+    console.error('Error parsing curl:', error);
+    event.sender.send('parse-curl-error', 'Failed to parse curl');
   }
 });
 
 
- 
+
+

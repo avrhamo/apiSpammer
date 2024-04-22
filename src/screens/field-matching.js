@@ -37,6 +37,7 @@ const curlInput = '{\n' +
     '}';
 
 const parsedCurlInput = JSON.parse(curlInput);
+const { ipcRenderer } = require('electron');
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -48,7 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     populateTable();
-    populateDropdowns(parsedCurlInput)
+    populateDropdowns(parsedCurlInput);
+
 });
 
 function generateTableRows(components) {
@@ -76,9 +78,16 @@ function generateTableRows(components) {
             tableRows += `<tr>
                 <td>${key}</td>
                 <td>
-                    <select class="dropdown" data-key="${key}">
-                        <!-- Dropdown options will be populated dynamically -->
-                    </select>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" 
+                        aria-expanded="false" 
+                        data-bs-toggle="dropdown"
+                        type="button" data-key="${key}"> ${key} 
+                    </button>
+                    <div class="dropdown-menu" data-key="drop-menu-${key}" id="drop-menu-${key}">
+                    <!-- Dropdown options will be populated dynamically -->
+                </div>
+                </div>
                 </td>
             </tr>`;
         });
@@ -97,9 +106,16 @@ function generateTableRows(components) {
                         tableRows += `<tr>
                             <td>${subKey}</td>
                             <td>
-                                <select class="form-select" data-key="${subKey}">
-                                    <!-- Dropdown options will be populated dynamically -->
-                                </select>
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" 
+                                    aria-expanded="false" 
+                                    data-bs-toggle="dropdown"
+                                    type="button" data-key="${subKey}"> ${subKey} 
+                                </button>
+                                <div class="dropdown-menu" data-key="drop-menu-${subKey} id="drop-menu-${subKey}">
+                                <!-- Dropdown options will be populated dynamically -->
+                            </div>
+                            </div>
                             </td>
                         </tr>`;
                     }
@@ -109,11 +125,16 @@ function generateTableRows(components) {
                 tableRows += `<tr>
                     <td>${key}</td>
                     <td>
-                        <div style="display: flex;">
-                            <select class="form-select" data-key="${key}">
-                            <!-- Dropdown options will be populated dynamically -->
-                            </select>
-                        </div>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" 
+                            aria-expanded="false" 
+                            data-bs-toggle="dropdown"
+                            type="button" data-key="${key}"> ${key} 
+                        </button>
+                        <div class="dropdown-menu" data-key="drop-menu-${key}" id="drop-menu-${key}">
+                        <!-- Dropdown options will be populated dynamically -->
+                    </div>
+                    </div>
                     </td>
                 </tr>`;
             }
@@ -127,33 +148,69 @@ function populateDropdowns(components, prefix = '') {
     for (let key in components) {
         if (components.hasOwnProperty(key)) {
             const value = components[key];
-            const dropdown = document.querySelector(`[data-key="${key}"]`);
+            const dropdown = document.querySelector(`[data-key="drop-menu-${key}"]`);
 
-            if (dropdown || typeof value === 'object') {
+            // Check if dropdown element exists
+            if (dropdown) {
                 // Clear previous options if dropdown exists
-                if (dropdown) {
-                    dropdown.innerHTML = '';
-                }
+                dropdown.innerHTML = '';
 
                 // Populate options
                 // Check if the value is an object (for nested properties)
                 if (typeof value === 'object' && value !== null) {
                     // Recursively populate dropdowns for nested properties
-                    populateDropdowns(value, `${prefix}${key}.`);
+                    populateDropdowns(value, `${key}${subkey}.`);
                 } else {
                     // If value is not an object, add a single option with the value
-                    const optionElement = document.createElement('option');
-                    optionElement.text = value;
-                    if (dropdown) {
-                        dropdown.add(optionElement);
-                    }
-                }
+                    const dropdownItem = document.createElement('a');
+                    dropdownItem.classList.add('dropdown-item');
+                    dropdownItem.textContent = value;
+                    dropdownItem.setAttribute('href', '#'); // Set the href attribute for a tag
+                    dropdownItem.setAttribute('id', `dropdownItem-${key}`);
+                    dropdown.appendChild(dropdownItem);
 
-                // Set default value if it exists in the options
-                if (dropdown) {
-                    dropdown.value = value;
+                    // Set default value if it exists in the options
+                    // dropdown.value = value;
+                    populateDropdown(key)
                 }
             }
         }
     }
+}
+
+
+function populateDropdown(key) {
+    const dropdownMenu = document.getElementById(`drop-menu-${key}`);
+    // dropdownMenu.innerHTML = ''; 
+
+    ipcRenderer.send('electronStore.get', 'appStorage.dataSource');
+
+    ipcRenderer.on('electronStore.get.response', (event, collections) => {
+        if (collections) {
+            collections.forEach(entry => {
+                const collection = entry.collection;
+                const dataSample = collection.dataSample;
+
+                // Check if dataSample is an object
+                if (typeof dataSample === 'object' && dataSample !== null) {
+                    // Extract keys of the dataSample object
+                    const keys = Object.keys(dataSample);
+                    
+                    // Add each key as a dropdown item
+                    keys.forEach(key => {
+                        const dropdownItem = document.createElement('a');
+                        dropdownItem.classList.add(`dropdown-item-${key}`);
+                        dropdownItem.textContent = key;
+                        dropdownItem.setAttribute('href', '#'); 
+                        dropdownItem.setAttribute('id', `dropdownItem-${key}`);
+                        dropdownMenu.appendChild(dropdownItem);
+                    });
+                } else {
+                    console.error('Error: dataSample is not an object');
+                }
+            });
+        } else {
+            console.error('Error: Failed to retrieve collections data from Electron store');
+        }
+    });
 }
