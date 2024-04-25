@@ -134,18 +134,37 @@ function generateTableRows(components) {
 }
 
 function populateDropdowns(components) {
-
     for (let key in components) {
         if (components.hasOwnProperty(key)) {
             const value = components[key];
             const dropdown = document.querySelector(`[data-key="drop-menu-${key}"]`);
-            // const dropdown = document.getElementById(`drop-menu-${key}`);
             if (typeof value === 'object' && value !== null) {
                 // Recursively populate dropdowns for nested properties
                 populateDropdowns(value);
             }
             // Check if dropdown element exists
             if (dropdown) {
+                // Create search input field within the dropdown menu
+                const searchInput = document.createElement('input');
+                searchInput.setAttribute('type', 'text');
+                searchInput.setAttribute('placeholder', 'Search...');
+                searchInput.classList.add('dropdown-item', 'search-input');
+                dropdown.appendChild(searchInput);
+
+                // Add event listener to filter dropdown items based on search input
+                searchInput.addEventListener('input', function(event) {
+                    const searchText = event.target.value.toLowerCase();
+                    const dropdownItems = dropdown.querySelectorAll('.dropdown-item:not(.search-input)');
+                    dropdownItems.forEach(function(item) {
+                        const textContent = item.textContent.toLowerCase();
+                        if (textContent.includes(searchText)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+
                 // If value is not an object, add a single option with the value
                 const dropdownItem = document.createElement('a');
                 dropdownItem.classList.add('dropdown-item');
@@ -156,7 +175,7 @@ function populateDropdowns(components) {
 
                 // Event listener to update button text when an item is selected
                 dropdown.addEventListener('click', function(event) {
-                    if (event.target.classList.contains('dropdown-item')) {
+                    if (event.target.classList.contains('dropdown-item') && !event.target.classList.contains('search-input')) {
                         const selectedItem = event.target.textContent;
                         const buttonId = dropdown.dataset.key.replace('drop-menu-', 'drop-button-');
                         const button = document.getElementById(buttonId);
@@ -165,16 +184,17 @@ function populateDropdowns(components) {
                         }
                     }
                 });
-                
-                populateDropdown(key);
             }
+            populateDropdown(key);
         }
     }
 }
 
+
 function populateDropdown(key) {
+    // if(!document.getElementById(`drop-menu-${key}`)) return;
     const dropdownMenu = document.getElementById(`drop-menu-${key}`);
-    dropdownMenu.innerHTML = '';
+    // dropdownMenu.innerHTML = '';
 
     ipcRenderer.send('electronStore.get', 'appStorage.dataSource');
 
