@@ -39,12 +39,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Loop through each dropdown toggle button
     dropdownToggleButtons = dropdownElementList.map(function (dropdownToggleEl) {
         return new bootstrap.Dropdown(dropdownToggleEl)
-      })
+    })
 });
 
 function generateTableRows(components) {
     let tableRows = '';
-    
+
     if (components.hasOwnProperty('url')) {
         const urlValue = components['url'];
         // Parse the URL string
@@ -73,7 +73,7 @@ function generateTableRows(components) {
                         data-bs-toggle="dropdown"
                         type="button" data-key="drop-button-${key}" id="drop-button-${key}"> ${value} 
                     </button>
-                    <div class="dropdown-menu" data-key="drop-menu-${key}" id="drop-menu-${key}">
+                    <div class="dropdown-menu dropdown-menu-scroll" style="max-height: 300px; overflow-y: auto;" data-key="drop-menu-${key}" id="drop-menu-${key}">
                     <!-- Dropdown options will be populated dynamically -->
                 </div>
                 </div>
@@ -101,7 +101,7 @@ function generateTableRows(components) {
                                     data-bs-toggle="dropdown"
                                     type="button" data-key="drop-button-${subKey}" id="drop-button-${subKey}"> ${subValue} 
                                 </button>
-                                <div class="dropdown-menu" data-key="drop-menu-${subKey}" id="drop-menu-${subKey}">
+                                <div class="dropdown-menu dropdown-menu-scroll" style="max-height: 300px; overflow-y: auto;" data-key="drop-menu-${subKey}" id="drop-menu-${subKey}">
                                 <!-- Dropdown options will be populated dynamically -->
                             </div>
                             </div>
@@ -120,7 +120,7 @@ function generateTableRows(components) {
                             data-bs-toggle="dropdown"
                             type="button" data-key="drop-button-${key}" id="drop-button-${key}"> ${value} 
                         </button>
-                        <div class="dropdown-menu" data-key="drop-menu-${key}" id="drop-menu-${key}">
+                        <div class="dropdown-menu dropdown-menu-scroll"  style="max-height: 300px; overflow-y: auto;" data-key="drop-menu-${key}" id="drop-menu-${key}">
                         <!-- Dropdown options will be populated dynamically -->
                     </div>
                     </div>
@@ -152,10 +152,10 @@ function populateDropdowns(components) {
                 dropdown.appendChild(searchInput);
 
                 // Add event listener to filter dropdown items based on search input
-                searchInput.addEventListener('input', function(event) {
+                searchInput.addEventListener('input', function (event) {
                     const searchText = event.target.value.toLowerCase();
                     const dropdownItems = dropdown.querySelectorAll('.dropdown-item:not(.search-input)');
-                    dropdownItems.forEach(function(item) {
+                    dropdownItems.forEach(function (item) {
                         const textContent = item.textContent.toLowerCase();
                         if (textContent.includes(searchText)) {
                             item.style.display = 'block';
@@ -164,17 +164,30 @@ function populateDropdowns(components) {
                         }
                     });
                 });
+                // Add event listener to search input field
+                searchInput.addEventListener('keydown', function (event) {
+                    const dropdownItems = dropdown.querySelectorAll('.dropdown-item:not(.search-input)');
+                    const visibleItems = Array.from(dropdownItems).filter(item => item.style.display !== 'none');
+                    const currentIndex = visibleItems.findIndex(item => item === document.activeElement);
 
-                // If value is not an object, add a single option with the value
-                const dropdownItem = document.createElement('a');
-                dropdownItem.classList.add('dropdown-item');
-                dropdownItem.textContent = value;
-                dropdownItem.setAttribute('href', '#');
-                dropdownItem.setAttribute('id', `dropdownItem-${key}`);
-                dropdown.appendChild(dropdownItem);
+                    switch (event.key) {
+                        case 'ArrowDown':
+                            event.preventDefault();
+                            if (currentIndex < visibleItems.length - 1) {
+                                visibleItems[currentIndex + 1].focus();
+                            }
+                            break;
+                        case 'ArrowUp':
+                            event.preventDefault();
+                            if (currentIndex > 0) {
+                                visibleItems[currentIndex - 1].focus();
+                            }
+                            break;
+                    }
+                });
 
                 // Event listener to update button text when an item is selected
-                dropdown.addEventListener('click', function(event) {
+                dropdown.addEventListener('click', function (event) {
                     if (event.target.classList.contains('dropdown-item') && !event.target.classList.contains('search-input')) {
                         const selectedItem = event.target.textContent;
                         const buttonId = dropdown.dataset.key.replace('drop-menu-', 'drop-button-');
@@ -184,21 +197,21 @@ function populateDropdowns(components) {
                         }
                     }
                 });
+
+                // Populate dropdown options asynchronously
+                populateDropdown(key);
             }
-            populateDropdown(key);
         }
     }
 }
 
-
 function populateDropdown(key) {
-    // if(!document.getElementById(`drop-menu-${key}`)) return;
     const dropdownMenu = document.getElementById(`drop-menu-${key}`);
-    // dropdownMenu.innerHTML = '';
+    if (!dropdownMenu) return;
 
     ipcRenderer.send('electronStore.get', 'appStorage.dataSource');
 
-    ipcRenderer.on('electronStore.get.response', (event, collections) => {
+    ipcRenderer.once('electronStore.get.response', (event, collections) => {
         if (collections) {
             collections.forEach(entry => {
                 const collection = entry.collection;
