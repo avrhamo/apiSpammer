@@ -6,9 +6,10 @@ const curlInput = '{\n' +
     '    "accept": "*/*",\n' +
     '    "accept-language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",\n' +
     '    "authorization": "SAPISIDHASH fd6f438c547cf9565ed53d9c95f5a8bc5ab5e0fe",\n' +
+    '    "jwt": "SAPISIDHASH fd6f438c547cf9565ed53d9c95f5a8bc5ab5e0fe",\n' +
     '    "content-type": "text/plain;charset=UTF-8"\n' +
     '  },\n' +
-    '  "url": "https://www.google.com/log?format=json&hasfast=true&authuser=0",\n' +
+    '  "url": "http://localhost:8080/log?format=json&hasfast=true&authuser=0",\n' +
     '  "body": {\n' +
     '    "body-key1": "value1",\n' +
     '    "body-key2": "value2",\n' +

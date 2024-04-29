@@ -30,7 +30,7 @@ function createWindow() {
 app.whenReady().then(createWindow);
 
 function clearStorage(){
-  // store.clear();
+  store.clear();
 }
 
 app.on('before-quit', () => {
