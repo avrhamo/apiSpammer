@@ -22,7 +22,19 @@ const { ipcRenderer } = require('electron');
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    function extractParamsFromUrl(url) {
+        const urlObject = new URL(url);
+        const pathParams = urlObject.pathname.split('/').filter(param => param !== ''); // Extract path params
+        const queryParams = Object.fromEntries(urlObject.searchParams); // Extract query params
+        return { pathParams, queryParams };
+    }
+    
+    // Extract parameters from the URL and add them to the parsedCurlInput object
+    const { pathParams, queryParams } = extractParamsFromUrl(parsedCurlInput.url);
+    parsedCurlInput.urlParams = { pathParams, queryParams };
+    console.log(parsedCurlInput);
 
+    
     // Populate the table with cURL components
     function populateTable() {
         const tableBody = document.getElementById('curlTableBody');
@@ -41,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
     dropdownToggleButtons = dropdownElementList.map(function (dropdownToggleEl) {
         return new bootstrap.Dropdown(dropdownToggleEl)
     })
+
 });
 
 function generateTableRows(components) {
@@ -65,26 +78,12 @@ function generateTableRows(components) {
 
         // Add rows for query parameters
         urlObject.searchParams.forEach((value, key) => {
-            tableRows += `<tr>
-                <td>${key}</td>
-                <td class="align-middle my-auto">
-                <div class="dropdown d-flex align-items-center my-auto justify-content-xxl-start align-items-xxl-end" id="dropdownElement-${key}">
-                <button class="btn btn-secondary dropdown-toggle" 
-                        aria-expanded="false" 
-                        data-bs-toggle="dropdown"
-                        type="button" data-key="drop-button-${key}" id="drop-button-${key}"> ${value} 
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-scroll" style="max-height: 300px; overflow-y: auto;" data-key="drop-menu-${key}" id="drop-menu-${key}">
-                    <!-- Dropdown options will be populated dynamically -->
-                </div>
-                </div>
-                </td>
-            </tr>`;
+            tableRows += generateRowWithCheckbox(key, value);
         });
     }
 
     for (let key in components) {
-        if (key !== 'url' && components.hasOwnProperty(key)) {
+        if (components.hasOwnProperty(key)) {
             const value = components[key];
 
             // If the value is an object, iterate over its keys
@@ -92,47 +91,45 @@ function generateTableRows(components) {
                 for (let subKey in value) {
                     if (value.hasOwnProperty(subKey)) {
                         const subValue = value[subKey];
-                        // Add a row for the subKey-subValue pair
-                        tableRows += `<tr> 
-                            <td>${subKey}</td>
-                            <td class="align-middle my-auto">
-                            <div class="dropdown d-flex align-items-center my-auto justify-content-xxl-start align-items-xxl-end" id="dropdownElement-${key}">
-                            <button class="btn btn-secondary dropdown-toggle" 
-                                    aria-expanded="false" 
-                                    data-bs-toggle="dropdown"
-                                    type="button" data-key="drop-button-${subKey}" id="drop-button-${subKey}"> ${subValue} 
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-scroll" style="max-height: 300px; overflow-y: auto;" data-key="drop-menu-${subKey}" id="drop-menu-${subKey}">
-                                <!-- Dropdown options will be populated dynamically -->
-                            </div>
-                            </div>
-                            </td>
-                        </tr>`;
+                        if(typeof subValue !== 'object') tableRows += generateRowWithCheckbox(subKey, subValue);
                     }
                 }
             } else {
-                // Add a row for the key-value pair
-                tableRows += `<tr>
-                    <td>${key}</td>
-                    <td class="align-middle my-auto">
-                    <div class="dropdown d-flex align-items-center my-auto justify-content-xxl-start align-items-xxl-end" id="dropdownElement-${key}">
-                    <button class="btn btn-secondary dropdown-toggle" 
-                            aria-expanded="false" 
-                            data-bs-toggle="dropdown"
-                            type="button" data-key="drop-button-${key}" id="drop-button-${key}"> ${value} 
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-scroll"  style="max-height: 300px; overflow-y: auto;" data-key="drop-menu-${key}" id="drop-menu-${key}">
-                        <!-- Dropdown options will be populated dynamically -->
-                    </div>
-                    </div>
-                    </td>
-                </tr>`;
+                tableRows += generateRowWithCheckbox(key, value);
             }
         }
     }
 
     return tableRows;
 }
+
+function generateRowWithCheckbox(key, value) {
+    return `<tr style="border: 1px solid #ced4da;"> <!-- Add border styling to the row -->
+        <td>${key}</td>
+        <td class="align-middle my-auto">
+            <div class="dropdown-checkbox-container d-flex align-items-center">
+                <div class="dropdown" id="dropdownElement-${key}">
+                    <button class="btn btn-secondary dropdown-toggle" 
+                            aria-expanded="false" 
+                            data-bs-toggle="dropdown"
+                            type="button" data-key="drop-button-${key}" id="drop-button-${key}"> ${value} 
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-scroll" style="max-height: 300px; overflow-y: auto;" data-key="drop-menu-${key}" id="drop-menu-${key}">
+                        <!-- Dropdown options will be populated dynamically -->
+                    </div>
+                </div>
+                <div class="form-check" style="margin-left: 10px;"> <!-- Added custom margin -->
+                    <input class="form-check-input" type="checkbox" id="checkbox-${key}" data-key="${key}">
+                    <label class="form-check-label" for="checkbox-${key}">Disable</label>
+                </div>
+            </div>
+        </td>
+    </tr>`;
+}
+
+
+
+
 
 function populateDropdowns(components) {
     for (let key in components) {
@@ -195,18 +192,20 @@ function populateDropdowns(components) {
                         const button = document.getElementById(buttonId);
                         if (button) {
                             button.textContent = selectedItem;
+                            // Update default value
+                            button.dataset.defaultValue = selectedItem;
                         }
                     }
                 });
 
                 // Populate dropdown options asynchronously
-                populateDropdown(key);
+                populateDropdown(key, value);
             }
         }
     }
 }
 
-function populateDropdown(key) {
+function populateDropdown(key, value) {
     const dropdownMenu = document.getElementById(`drop-menu-${key}`);
     if (!dropdownMenu) return;
 
@@ -222,13 +221,12 @@ function populateDropdown(key) {
                 if (typeof dataSample === 'object' && dataSample !== null) {
                     // Extract keys of the dataSample object
                     const keys = Object.keys(dataSample);
-
+                    keys.push(value);
                     // Add each key as a dropdown item
                     keys.forEach(key => {
                         const dropdownItem = document.createElement('a');
                         dropdownItem.classList.add('dropdown-item');
                         dropdownItem.textContent = key;
-                        dropdownItem.setAttribute('href', '#');
                         dropdownItem.setAttribute('id', `dropdownItem-${key}`);
                         dropdownMenu.appendChild(dropdownItem);
                     });
@@ -241,3 +239,23 @@ function populateDropdown(key) {
         }
     });
 }
+
+
+// Function to handle checkbox change event
+function handleCheckboxChange(event) {
+    const key = event.target.dataset.key;
+    const dropdownButton = document.getElementById(`drop-button-${key}`);
+    if (event.target.checked) {
+        dropdownButton.setAttribute('disabled', 'disabled');
+    } else {
+        dropdownButton.removeAttribute('disabled');
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', handleCheckboxChange);
+    });
+});
