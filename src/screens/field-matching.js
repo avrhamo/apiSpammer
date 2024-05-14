@@ -1,25 +1,25 @@
 
 const curlInput = '{\n' +
-    '  "method": "POST",\n' +
-    '  "headers": {\n' +
-    '    "authority": "www.google.com",\n' +
-    '    "accept": "*/*",\n' +
-    '    "accept-language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",\n' +
-    '    "authorization": "SAPISIDHASH fd6f438c547cf9565ed53d9c95f5a8bc5ab5e0fe",\n' +
-    '    "jwt": "SAPISIDHASH fd6f438c547cf9565ed53d9c95f5a8bc5ab5e0fe",\n' +
-    '    "content-type": "text/plain;charset=UTF-8"\n' +
-    '  },\n' +
-    '  "url": "http://localhost:8080/log?format=json&hasfast=true&authuser=0",\n' +
-    '  "body": {\n' +
-    '    "body-key1": "value1",\n' +
-    '    "body-key2": "value2",\n' +
-    '    "body-key3": "value3"\n' +
-    '  }\n' +
-    '}';
+'  "method": "POST",\n' +
+'  "headers": {\n' +
+'    "authority": "www.google.com",\n' +
+'    "accept": "*/*",\n' +
+'    "accept-language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",\n' +
+'    "authorization": "SAPISIDHASH fd6f438c547cf9565ed53d9c95f5a8bc5ab5e0fe",\n' +
+'    "jwt": "SAPISIDHASH fd6f438c547cf9565ed53d9c95f5a8bc5ab5e0fe",\n' +
+'    "content-type": "text/plain;charset=UTF-8"\n' +
+'  },\n' +
+'  "url": "http://localhost:8080/log?format=json&hasfast=true&authuser=0",\n' +
+'  "body": {\n' +
+'    "body-key1": {"key1": "value1", "key2": "value2", "key3": "value3"},\n' +
+'    "body-key2": "value2",\n' +
+'    "body-key3": "value3"\n' +
+'  }\n' +
+'}';
 
 const parsedCurlInput = JSON.parse(curlInput);
 const { ipcRenderer } = require('electron');
-
+let urlParsed = false;
 
 document.addEventListener('DOMContentLoaded', function () {
     function extractParamsFromUrl(url) {
@@ -56,46 +56,73 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-function generateTableRows(components) {
+function generateTableRows(components, parentKey = '') {
     let tableRows = '';
 
-    if (components.hasOwnProperty('url')) {
+    if (components.hasOwnProperty('url') && !urlParsed) {
         const urlValue = components['url'];
         // Parse the URL string
         const urlObject = new URL(urlValue);
 
         // Add row for the domain
-        tableRows += `<tr>
-            <td>domain</td>
-            <td>${urlObject.origin}</td>
+        tableRows += `<tr style="border: 1px solid #ced4da;">
+            <td class="align-middle my-auto">Domain</td>
+            <td><input type="text" class="align-middle my-auto" value="${urlObject.origin}" id="domainInput" /></td>
         </tr>`;
-
         // Add row for the path
-        tableRows += `<tr>
-            <td>path</td>
-            <td>${urlObject.pathname}</td>
+        tableRows += `<tr style="border: 1px solid #ced4da;">
+            <td class="align-middle my-auto">Path</td>
+            <td><input type="text" class="align-middle my-auto" value="${urlObject.pathname}" id="pathInput" /></td>
         </tr>`;
 
         // Add rows for query parameters
         urlObject.searchParams.forEach((value, key) => {
-            tableRows += generateRowWithCheckbox(key, value);
+            tableRows += generateRowWithCheckbox(`urlParams.queryParams.${key}`, value);
         });
+
+        urlParsed = true;
     }
 
-    for (let key in components) {
-        if (components.hasOwnProperty(key)) {
-            const value = components[key];
+    // Title rows for "HEADERS" and "BODY"
+    const titleRows = {
+        headers: '<tr class="table-active"><td colspan="2">HEADERS</td></tr>',
+        body: '<tr class="table-active"><td colspan="2">BODY</td></tr>'
+    };
 
-            // If the value is an object, iterate over its keys
+    for (let key in components) {
+        if (components.hasOwnProperty(key) && key !== 'url') {
+            const value = components[key];
+            const fullKey = parentKey ? `${parentKey}.${key}` : key;
+
             if (typeof value === 'object' && value !== null) {
-                for (let subKey in value) {
-                    if (value.hasOwnProperty(subKey)) {
-                        const subValue = value[subKey];
-                        if(typeof subValue !== 'object') tableRows += generateRowWithCheckbox(subKey, subValue);
+                // Add title row if it's a header or body section
+                if (titleRows[key]) {
+                    tableRows += titleRows[key];
+                }
+
+                // Check if the key indicates URL parameters and process accordingly
+                if (key.toLowerCase().includes('params')) {
+                    // URL parameters
+                    for (let subKey in value) {
+                        if (value.hasOwnProperty(subKey)) {
+                            const subValue = value[subKey];
+                            tableRows += generateRowWithCheckbox(`${key}.${subKey}`, subValue);
+                        }
+                    }
+                } else {
+                    // Headers or body fields
+                    if (Array.isArray(value)) {
+                        // If it's an array, recursively process each item
+                        value.forEach((item, index) => {
+                            tableRows += generateTableRows(item, `${fullKey}.${index}`);
+                        });
+                    } else {
+                        tableRows += generateTableRows(value, fullKey);
                     }
                 }
             } else {
-                tableRows += generateRowWithCheckbox(key, value);
+                // Generate row for a simple key-value pair
+                tableRows += generateRowWithCheckbox(fullKey, value);
             }
         }
     }
@@ -103,32 +130,40 @@ function generateTableRows(components) {
     return tableRows;
 }
 
-function generateRowWithCheckbox(key, value) {
-    return `<tr style="border: 1px solid #ced4da;"> <!-- Add border styling to the row -->
+
+function generateRowWithCheckbox(key, value, isSpecialField = true) {
+    return `<tr style="border: 1px solid #ced4da;">
         <td>${key}</td>
         <td class="align-middle my-auto">
-            <div class="dropdown-checkbox-container d-flex align-items-center">
-                <div class="dropdown" id="dropdownElement-${key}">
-                    <button class="btn btn-secondary dropdown-toggle" 
-                            aria-expanded="false" 
-                            data-bs-toggle="dropdown"
-                            type="button" data-key="drop-button-${key}" id="drop-button-${key}"> ${value} 
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-scroll" style="max-height: 300px; overflow-y: auto;" data-key="drop-menu-${key}" id="drop-menu-${key}">
-                        <!-- Dropdown options will be populated dynamically -->
+            <div class="row">
+                <div class="col-6">
+                    <div class="dropdown mr-3" id="dropdownElement-${key}">
+                        <button class="btn btn-secondary dropdown-toggle" 
+                                aria-expanded="false" 
+                                data-bs-toggle="dropdown"
+                                type="button" data-key="drop-button-${key}" id="drop-button-${key}"> ${value} 
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-scroll" style="max-height: 300px; overflow-y: auto;" data-key="drop-menu-${key}" id="drop-menu-${key}">
+                        </div>
                     </div>
                 </div>
-                <div class="form-check" style="margin-left: 10px;"> <!-- Added custom margin -->
-                    <input class="form-check-input" type="checkbox" id="checkbox-${key}" data-key="${key}">
-                    <label class="form-check-label" for="checkbox-${key}">Disable</label>
+                <div class="col-4">
+                    <div class="form-check mr-3">
+                        <input class="form-check-input" type="checkbox" id="checkbox-${key}" data-key="${key}">
+                        <label class="form-check-label ml-1" for="checkbox-${key}">Disable</label>
+                    </div>
+                </div>
+                <div class="col-2">
+                    ${isSpecialField ? 
+                        `<button class="btn btn-info" 
+                            aria-expanded="false"
+                            type="button" data-special-field-btn="true"> Special Field
+                        </button>` : ''}
                 </div>
             </div>
         </td>
     </tr>`;
 }
-
-
-
 
 
 function populateDropdowns(components) {
@@ -257,5 +292,86 @@ document.addEventListener('DOMContentLoaded', function () {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', handleCheckboxChange);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const specialFieldButtons = document.querySelectorAll('[data-special-field-btn]');
+    const modal = new bootstrap.Modal(document.getElementById('specialFieldModal'));
+
+    specialFieldButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            modal.show();
+        });
+    });
+
+    document.getElementById('saveSpecialFieldBtn').addEventListener('click', function () {
+        // Get the value entered in the modal input field
+        const specialFieldValue = document.getElementById('specialFieldInput').value;
+        // Do something with the value, e.g., send it to the server
+        console.log('Special Field Value:', specialFieldValue);
+        // Close the modal
+        modal.hide();
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const authorizationCheckbox = document.getElementById('authorizationCheckbox');
+    const encodedFieldCheckbox = document.getElementById('encodedFieldCheckbox');
+    const jwtCheckbox = document.getElementById('jwtCheckbox');
+
+    const authorizationFields = document.getElementById('authorizationFields');
+    const encodedField = document.getElementById('encodedField');
+    const jwtField = document.getElementById('jwtField');
+
+    const modal = new bootstrap.Modal(document.getElementById('specialFieldModal'));
+
+    // Function to show only the related fields based on checkbox selection
+    function showRelatedFields() {
+        authorizationFields.style.display = authorizationCheckbox.checked ? 'block' : 'none';
+        encodedField.style.display = encodedFieldCheckbox.checked ? 'block' : 'none';
+        jwtField.style.display = jwtCheckbox.checked ? 'block' : 'none';
+    }
+
+    // Initially show only the authorization fields
+    showRelatedFields();
+
+    // Function to handle checkbox selection
+    function handleCheckboxSelection(checkbox) {
+        if (checkbox === authorizationCheckbox) {
+            encodedFieldCheckbox.checked = false;
+            jwtCheckbox.checked = false;
+        } else if (checkbox === encodedFieldCheckbox) {
+            authorizationCheckbox.checked = false;
+            jwtCheckbox.checked = false;
+        } else if (checkbox === jwtCheckbox) {
+            authorizationCheckbox.checked = false;
+            encodedFieldCheckbox.checked = false;
+        }
+
+        // Show only the related fields
+        showRelatedFields();
+    }
+
+    // Event listeners for checkbox selection
+    authorizationCheckbox.addEventListener('change', function () {
+        handleCheckboxSelection(this);
+    });
+
+    encodedFieldCheckbox.addEventListener('change', function () {
+        handleCheckboxSelection(this);
+    });
+
+    jwtCheckbox.addEventListener('change', function () {
+        handleCheckboxSelection(this);
+    });
+
+    // Event listener for saving the special field
+    document.getElementById('saveSpecialFieldBtn').addEventListener('click', function () {
+        // Handle saving the special field based on the checkbox selection
+        // ...
+
+        // Close the modal
+        modal.hide();
     });
 });
